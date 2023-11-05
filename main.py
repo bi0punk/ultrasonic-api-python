@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, render_template
+from flask import jsonify
 
 app = Flask(__name__)
 
@@ -18,6 +19,10 @@ def receive_sensor_data():
 @app.route('/data', methods=['GET'])
 def get_sensor_data():
     return jsonify(sensor_data)
+
+@app.route('/view', methods=['GET'])
+def view_sensor_data():
+    return render_template('data.html', sensor_data=sensor_data)
 
 if __name__ == '__main__':
     app.run(host='192.168.33.237', port=5000)
