@@ -2,15 +2,9 @@ from flask import Flask, request, render_template, jsonify
 from gtts import gTTS
 import os
 
-app = Flask(__name)
+app = Flask(__name__)
 
-sensor_data = []  # Lista para almacenar los datos recibos
-notification_threshold = {
-    "temperature_min": None,
-    "temperature_max": None,
-    "humidity_min": None,
-    "humidity_max": None
-}
+sensor_data = []  # Lista para almacenar los datos recibidos
 
 def send_voice_notification(message):
     tts = gTTS(text=message, lang='en')
@@ -24,12 +18,10 @@ def receive_sensor_data():
     humidity = data.get('humidity')
 
     # Verifica las condiciones de notificación
-    if (notification_threshold["temperature_min"] is not None and temperature < notification_threshold["temperature_min"]) or \
-            (notification_threshold["temperature_max"] is not None and temperature > notification_threshold["temperature_max"]):
+    if temperature < 30 or temperature > 25:
         send_voice_notification("Alerta de temperatura!")
 
-    if (notification_threshold["humidity_min"] is not None and humidity < notification_threshold["humidity_min"]) or \
-            (notification_threshold["humidity_max"] is not None and humidity > notification_threshold["humidity_max"]):
+    if humidity < 20 or humidity > 67:
         send_voice_notification("Alerta de humedad!")
 
     # Almacena los datos en la lista sensor_data
@@ -47,4 +39,3 @@ def view_sensor_data():
 
 if __name__ == '__main__':
     app.run(host='192.168.33.237', port=5000)
-
