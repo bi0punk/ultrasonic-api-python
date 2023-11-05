@@ -18,7 +18,7 @@ def receive_sensor_data():
     humidity = data.get('humidity')
 
     # Verifica las condiciones de notificación
-    if temperature < 30 or temperature > 25:
+    if temperature < 15 or temperature > 30:
         send_voice_notification("Alerta de temperatura!")
 
     if humidity < 20 or humidity > 67:
