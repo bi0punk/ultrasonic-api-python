@@ -1,15 +1,36 @@
-from flask import Flask, request, render_template
-from flask import jsonify
+from flask import Flask, request, render_template, jsonify
+from gtts import gTTS
+import os
 
-app = Flask(__name__)
+app = Flask(__name)
 
-sensor_data = []  # Lista para almacenar los datos recibidos
+sensor_data = []  # Lista para almacenar los datos recibos
+notification_threshold = {
+    "temperature_min": None,
+    "temperature_max": None,
+    "humidity_min": None,
+    "humidity_max": None
+}
+
+def send_voice_notification(message):
+    tts = gTTS(text=message, lang='en')
+    tts.save('notification.mp3')
+    os.system('mpg123 notification.mp3')  # Asegúrate de tener el reproductor mpg123 instalado
 
 @app.route('/api', methods=['POST'])
 def receive_sensor_data():
     data = request.get_json()
     temperature = data.get('temperature')
     humidity = data.get('humidity')
+
+    # Verifica las condiciones de notificación
+    if (notification_threshold["temperature_min"] is not None and temperature < notification_threshold["temperature_min"]) or \
+            (notification_threshold["temperature_max"] is not None and temperature > notification_threshold["temperature_max"]):
+        send_voice_notification("Alerta de temperatura!")
+
+    if (notification_threshold["humidity_min"] is not None and humidity < notification_threshold["humidity_min"]) or \
+            (notification_threshold["humidity_max"] is not None and humidity > notification_threshold["humidity_max"]):
+        send_voice_notification("Alerta de humedad!")
 
     # Almacena los datos en la lista sensor_data
     sensor_data.append({"temperature": temperature, "humidity": humidity})
@@ -26,3 +47,4 @@ def view_sensor_data():
 
 if __name__ == '__main__':
     app.run(host='192.168.33.237', port=5000)
+
