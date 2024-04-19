@@ -50,9 +50,7 @@ async def show_data(request: Request):
                     dataValue.textContent = JSON.stringify(data);
                 });
         }
-        // Actualizar el valor cada 5 segundos
         setInterval(updateData, 1000);
-        // Iniciar la actualización del valor al cargar la página
         updateData();
     </script>
     </html>
