@@ -1,21 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Título de tu página</title>
-    <link rel="stylesheet" href="static/style.css">
-</head>
-<body>
-    <div class="levels" id="levels">
-        <div class="level" id="level1"></div>
-        <div class="level" id="level2"></div>
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <title>Distance meter project with python and esp8266</title> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/css/foundation.min.css" crossorigin="anonymous"> 
+    <style>
+        body {
+            font-family: Arial, sans-serif; /* Cambiar la fuente principal */
+            background-color: #f2f2f2; /* Cambiar el color de fondo */
+            padding: 20px;
+        }
+        h2, h4 {
+            color: #333; /* Cambiar el color del texto de los encabezados */
+        }
+        .progress {
+            margin-bottom: 20px;
+        }
+        #distance-info {
+            margin-top: 20px;
+            font-family: "Courier New", monospace; /* Cambiar la fuente para la distancia */
+            font-size: 18px; /* Cambiar el tamaño del texto de la distancia */
+        }
+    </style>
+</head> 
+<body class="grid-container"> 
+    <h2>FastAPI Progress Bar</h2> 
+    <h4>Updating Progress from FastAPI</h4> 
+    <div class="success progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">  
+        <span class="progress-meter" style="width: 0%"> 
+            <span class="progress-meter-text">0%</span> 
+        </span> 
     </div>
+    <div id="distance-info">Distance: <span id="distance-value">0</span> cm</div> 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function updateProgressBar() {
+                $.ajax({
+                    url: '/get_latest_data',
+                    type: 'GET',
+                    success: function(data) {
+                        const value = parseInt(data.progress);
+                        const distance = data.progress !== undefined ? data.progress : 0;
+                        const progressMeter = document.querySelector(".progress-meter");
+                        const progressText = document.querySelector(".progress-meter-text");
+                        const distanceValue = document.getElementById("distance-value");
 
-    <div class="footer">
-        <div class="name">Level Meter</div>
-        <div class="description">by Tobias Bley <br><a target="_blank" href="http://onexip.com">www.onexip.com</a></div>
-        <div class="twitter">Follow me on <a target="_blank" href="https://twitter.com/tobibley"> Twitter</a></div>
-    </div>
-</body>
+                        progressMeter.style.width = value + "%";
+                        progressText.innerHTML = value + " Cms";
+                        distanceValue.innerHTML = distance;
+
+                        setTimeout(updateProgressBar, 1000); // Actualizar la barra de progreso cada 1 segundo
+                    }
+                });
+            }
+
+            updateProgressBar();
+        });
+    </script>
+</body> 
 </html>
