@@ -1,97 +1,107 @@
-input, button {
-    margin-left:4px;
+/* Estilos para el medidor de nivel */
+.levels {
+    height: 300px;
+    width: 30px;
+    background-color: #333;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: row;
+    padding: 4px 3px;
+    margin: auto;
+    margin-top: 20px;
 }
-input {
-    width:83px;
-}
-button {
-    width:87px;
-    padding:5px 0px 5px 0px;
-}
-.container {
-    min-width:90px;
-    max-width:90px;
-    height:350px;
-    position:relative;
-    width:100%;
-}
-.attendance {
-    width:90%;
-    float:left;
-    background-color:#1f1f1f;
-    margin:7px 5% 5px 5%;
-    padding-bottom:10px;
-    border-style:solid;
-    border-color: #111111 #4e4e4e #4e4e4e #111111;
-    border-width:2px;
-    position:relative;
-}
-.attendance .title {
-    font-family:"Arial";
-    color:white;
-    font-size:9pt;
-    font-weight:bold;
-    text-align:center;
-    padding:15px 0px 5px 0px;
-}
-.bar {
-    float:left;
-    width:90%;
-    margin:0px 5% 0px 5%;
-    height:260px;
-    background-color:#2f2f2f;
-    position:relative;
-}
-.cage {
-    width:100%;
-    float:left;
-    position:relative;
-}
-.bar-1, .bar-2, .bar-3, .bar-4, .bar-5, .bar-6, .bar-7, .bar-8, .bar-9 {
-    float:left;
-    width:100%;
-    background-color:#1f1f1f;
-    height:10px;
-}
-.bar-1 {
-    margin-bottom:14px;
-}
-.bar-2 {
-    margin-bottom:15px;
-}
-.bar-3 {
-    margin-bottom:16px;
-}
-.bar-4 {
-    margin-bottom:17px;
-}
-.bar-5 {
-    margin-bottom:18px;
-}
-.bar-6 {
-    margin-bottom:19px;
-}
-.bar-7 {
-    margin-bottom:20px;
-}
-.bar-8 {
-    margin-bottom:24px;
-}
-.bar-9 {
-    margin-bottom:22px;
-}
+
 .level {
-    float:left;
-    height:100px;
-    max-height:250px;
-    width:100%;
-    background-color:#6ae719;
-    position:absolute;
-    bottom:0;
+    position: relative; 
+    margin: 0 2px;
+    flex-grow: 1;
+    z-index: 3;
+    background-color: transparent;
+    background-repeat: repeat-y;
+    background-image: linear-gradient(to bottom, #666 3px, transparent 1px);
+    background-size: 100% 4px;
 }
-.level.med {
-    background-color:yellow;
+
+.level:before {
+    width: 100%;
+    height: 100%;
+    content: ' ';
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(to top, green 0%, yellow 80%, red 100%);
+    background-size: 100% 100%;
+    clip-path: inset(0% 0 0 0); 
+    -webkit-clip-path: inset(0% 0 0 0); 
+    animation: level-animation 500ms alternate infinite;
 }
-.level.low {
-    background-color:red;
+
+@keyframes level-animation {
+    0% {
+        clip-path: inset(0% 0 0 0);
+        -webkit-clip-path: inset(0% 0 0 0);
+    }
+    50% {
+        clip-path: inset(40% 0 0 0);
+        -webkit-clip-path: inset(40% 0 0 0);
+    }
+    100% {
+        clip-path: inset(20% 0 0 0);
+        -webkit-clip-path: inset(20% 0 0 0);
+    }
+}
+
+.level::after {
+    width: 100%;
+    height: 100%;
+    content: ' ';
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 2;
+    margin-top: 3px;
+    background-image: linear-gradient(to bottom, #333 1px, transparent 1px);
+    background-repeat: repeat-y;
+    background-size: 100% 4px;
+    background-color: transparent;
+}
+
+/* Estilos para el pie de página */
+body, html {
+    font-family: Arial, sans-serif;
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    margin-top: 20px;
+}
+
+.footer .name {
+    text-align: center;
+}
+
+.footer .description {
+    color: #888;
+    margin-top: 10px;
+    font-size: 12px;
+    flex-grow: 0;
+    text-align: center;
+}
+
+.footer .twitter {
+    background-image: url("https://upload.wikimedia.org/wikipedia/de/thumb/9/9f/Twitter_bird_logo_2012.svg/2000px-Twitter_bird_logo_2012.svg.png");
+    background-size: auto 12px;
+    background-repeat: no-repeat;
+    background-position: right center;
+    padding-right: 20px;
+    font-size: 12px;
+    flex-grow: 0;
+    margin-top: 10px;
+    color: #888;
 }
