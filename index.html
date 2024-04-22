@@ -1,61 +1,43 @@
-<!DOCTYPE html> 
-<html lang="en"> 
-<head> 
-    <title>Distance meter project with python and esp8266</title> 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/css/foundation.min.css" crossorigin="anonymous"> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mostrar Datos</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif; /* Cambiar la fuente principal */
-            background-color: #f2f2f2; /* Cambiar el color de fondo */
-            padding: 20px;
-        }
-        h2, h4 {
-            color: #333; /* Cambiar el color del texto de los encabezados */
-        }
-        .progress {
-            margin-bottom: 20px;
-        }
-        #distance-info {
+        /* Ajustes de estilo personalizados */
+        #data {
+            font-size: 24px;
             margin-top: 20px;
-            font-family: "Courier New", monospace; /* Cambiar la fuente para la distancia */
-            font-size: 18px; /* Cambiar el tamaño del texto de la distancia */
         }
     </style>
-</head> 
-<body class="grid-container"> 
-    <h2>FastAPI Progress Bar</h2> 
-    <h4>Updating Progress from FastAPI</h4> 
-    <div class="success progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">  
-        <span class="progress-meter" style="width: 0%"> 
-            <span class="progress-meter-text">0%</span> 
-        </span> 
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Datos Recibidos</h1>
+        <div id="data"></div>
     </div>
-    <div id="distance-info">Distance: <span id="distance-value">0</span> cm</div> 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap JS (opcional, solo si necesitas funcionalidades específicas de Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <script>
-        $(document).ready(function() {
-            function updateProgressBar() {
-                $.ajax({
-                    url: '/get_latest_data',
-                    type: 'GET',
-                    success: function(data) {
-                        const value = parseInt(data.progress);
-                        const distance = data.progress !== undefined ? data.progress : 0;
-                        const progressMeter = document.querySelector(".progress-meter");
-                        const progressText = document.querySelector(".progress-meter-text");
-                        const distanceValue = document.getElementById("distance-value");
+        // Función para cargar y actualizar los datos
+        async function cargarDatos() {
+            const response = await fetch('/get_latest_data');
+            const data = await response.json();
+            document.getElementById('data').innerText = `Distancia: ${data.distance}`;
+        }
 
-                        progressMeter.style.width = value + "%";
-                        progressText.innerHTML = value + " Cms";
-                        distanceValue.innerHTML = distance;
+        // Llamar a la función para cargar los datos al cargar la página
+        window.onload = cargarDatos;
 
-                        setTimeout(updateProgressBar, 1000); // Actualizar la barra de progreso cada 1 segundo
-                    }
-                });
-            }
-
-            updateProgressBar();
-        });
+        // Actualizar los datos cada segundo
+        setInterval(cargarDatos, 500);
     </script>
-</body> 
+</body>
 </html>
