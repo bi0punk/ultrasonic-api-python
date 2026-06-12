@@ -26,6 +26,7 @@ def receive_sensor_data():
 
     # Almacena los datos en la lista sensor_data
     sensor_data.append({"temperature": temperature, "humidity": humidity})
+    sensor_data = sensor_data[-1000:]
 
     return jsonify({"message": "Datos recibidos con éxito"})
 
@@ -38,4 +39,4 @@ def view_sensor_data():
     return render_template('data.html', sensor_data=sensor_data)
 
 if __name__ == '__main__':
-    app.run(host='192.168.33.237', port=5000)
+    app.run(host='127.0.0.1', port=5000)
