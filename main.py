@@ -26,7 +26,7 @@ def receive_sensor_data():
 
     # Almacena los datos en la lista sensor_data
     sensor_data.append({"temperature": temperature, "humidity": humidity})
-    sensor_data = sensor_data[-1000:]
+    sensor_data[:] = sensor_data[-1000:]
 
     return jsonify({"message": "Datos recibidos con éxito"})
 
