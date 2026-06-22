@@ -42,24 +42,20 @@
         crossorigin="anonymous"
     ></script>
 
-    <!-- Socket.IO Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
     <script>
-        var socket = io('http://192.168.1.90:8080');
+        function updateDistance() {
+            fetch('/get_latest_data')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('distance').innerText = 'Distancia medida: ' + JSON.stringify(data) + ' cm';
+                })
+                .catch(error => {
+                    document.getElementById('distance').innerText = 'Error al obtener datos: ' + error;
+                });
+        }
 
-
-        socket.on('connect', function() {
-            console.log('Conectado al servidor');
-        });
-
-        socket.on('disconnect', function() {
-            console.log('Desconectado del servidor');
-        });
-
-        socket.on('update_distance', function(data) {
-        document.getElementById('distance').innerText = 'Distancia medida: ' + data + ' cm';
-        });
-
+        setInterval(updateDistance, 1000);
+        updateDistance();
     </script>
 </body>
 </html>
