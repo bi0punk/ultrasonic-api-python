@@ -6,7 +6,7 @@ import socketio
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
-sio = socketio.AsyncServer(cors_allowed_origins="*")
+sio = socketio.AsyncServer(cors_allowed_origins=["http://localhost:8000"])
 app.mount("/socket.io", socketio.ASGIApp(sio))
 
 # Estructura de datos compartida
