@@ -1,23 +1,29 @@
-from flask import Flask, request, render_template, jsonify
-from gtts import gTTS
+import os
 import subprocess
 import threading
+
+from flask import Flask, jsonify, render_template, request
+from gtts import gTTS
 
 app = Flask(__name__)
 
 sensor_data = []  # Lista para almacenar los datos recibidos
 sensor_data_lock = threading.Lock()
 
-def send_voice_notification(message):
-    tts = gTTS(text=message, lang='en')
-    tts.save('notification.mp3')
-    subprocess.run(["mpg123", "notification.mp3"])  # Asegúrate de tener el reproductor mpg123 instalado
 
-@app.route('/api', methods=['POST'])
+def send_voice_notification(message):
+    tts = gTTS(text=message, lang="en")
+    tts.save("notification.mp3")
+    subprocess.run(
+        ["mpg123", "notification.mp3"]
+    )  # Asegúrate de tener el reproductor mpg123 instalado
+
+
+@app.route("/api", methods=["POST"])
 def receive_sensor_data():
     data = request.get_json()
-    temperature = data.get('temperature')
-    humidity = data.get('humidity')
+    temperature = data.get("temperature")
+    humidity = data.get("humidity")
 
     # Verifica las condiciones de notificación
     if temperature < 15 or temperature > 30:
@@ -33,15 +39,18 @@ def receive_sensor_data():
 
     return jsonify({"message": "Datos recibidos con éxito"})
 
-@app.route('/data', methods=['GET'])
+
+@app.route("/data", methods=["GET"])
 def get_sensor_data():
     with sensor_data_lock:
         return jsonify(sensor_data)
 
-@app.route('/view', methods=['GET'])
+
+@app.route("/view", methods=["GET"])
 def view_sensor_data():
     with sensor_data_lock:
-        return render_template('data.html', sensor_data=sensor_data)
+        return render_template("data.html", sensor_data=sensor_data)
 
-if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000)
+
+if __name__ == "__main__":
+    app.run(host=os.environ.get("HOST", "0.0.0.0"), port=int(os.environ.get("PORT", 5000)))
