@@ -1,12 +1,9 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include "DHTesp.h"
+#include "credentials.h"
 
-#define DHTPIN 5 // Cambia este número al pin GPIO al que conectaste el pin de datos del sensor
-
-const char* ssid = "Redmi 9";
-const char* password = "12345678";
-const char* apiEndpoint = "http://192.168.33.237:5000/api"; // Agrega el esquema "http://" y asegúrate de que la dirección y el puerto sean correctos
+#define DHTPIN 5
 
 DHTesp dht;
 unsigned long previousMillis = 0;
@@ -15,7 +12,7 @@ void setup() {
   Serial.begin(115200);
   dht.setup(DHTPIN, DHTesp::DHT11);
 
-  WiFi.begin(ssid, password);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
     Serial.println("Conectando a WiFi...");
@@ -40,7 +37,7 @@ void sendDataToAPI() {
     HTTPClient http;
 
     // Agrega el esquema "http://" a la URL del punto final
-    http.begin(apiEndpoint);
+    http.begin(API_ENDPOINT);
 
     // Formatea los números con 2 lugares decimales
     String jsonPayload = "{\"temperature\": " + String(temperature, 2) + ", \"humidity\": " + String(humidity, 2) + "}";
