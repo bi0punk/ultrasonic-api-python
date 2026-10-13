@@ -22,7 +22,7 @@ app.add_middleware(
 )
 
 # Variable para almacenar el último dato recibido del Arduino
-latest_data = {}
+latest_data: dict = {}
 
 
 # Ruta para recibir los datos JSON del Arduino

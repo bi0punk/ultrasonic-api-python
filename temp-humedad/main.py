@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 import threading
 
@@ -7,15 +8,19 @@ from gtts import gTTS
 
 app = Flask(__name__)
 
-sensor_data = []  # Lista para almacenar los datos recibidos
+sensor_data: list[dict] = []  # Lista para almacenar los datos recibidos
 sensor_data_lock = threading.Lock()
 
 
 def send_voice_notification(message):
     tts = gTTS(text=message, lang="en")
     tts.save("notification.mp3")
+    mpg123 = shutil.which("mpg123")
+    if mpg123 is None:
+        print("mpg123 no está instalado; no se reproducirá la notificación.")
+        return
     subprocess.run(
-        ["mpg123", "notification.mp3"]
+        [mpg123, "notification.mp3"]
     )  # Asegúrate de tener el reproductor mpg123 instalado
 
 

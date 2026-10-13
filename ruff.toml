@@ -6,5 +6,5 @@ select = ["E", "F", "I", "UP", "S", "B"]
 ignore = ["E501"]
 
 [lint.per-file-ignores]
-"tests/*" = ["S101"]
+"tests/*" = ["S101", "S607"]
 "temp-humedad/main.py" = ["S104", "S607", "S603"]

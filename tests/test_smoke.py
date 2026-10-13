@@ -44,6 +44,9 @@ def test_no_venv_tracked():
 
     tracked = subprocess.run(
         ["git", "ls-files", ".env", ".venv", "venv"],
-        cwd=REPO, capture_output=True, text=True, check=True,
+        cwd=REPO,
+        capture_output=True,
+        text=True,
+        check=True,
     ).stdout.strip()
     assert not tracked, f"Hay venv/env commiteado: {tracked}"
